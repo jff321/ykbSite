@@ -1,0 +1,72 @@
+/*theme*/
+@theme-color: #4588d4;//#5d80fa;//#f56c02; /*主题色*/
+@light-theme-color: #92c5e7;
+@color-666: #666;
+@color-fff: #fff;
+@color-e5e5e5: #e5e5e5;
+
+body {
+ 	color: #424242;
+}
+p {
+	color: #757575;
+}
+a {
+	color: @color-666;
+}
+.van{
+  /* tabbar active*/
+  &-tabbar-item--active,
+  &-tab--active,
+  .theme-color,
+  &-address-list &-icon-checked,
+  &-address-list__add &-icon-add{
+    color: @theme-color !important;
+  }
+  &-icon__info,
+  &-tabbar-item__icon-dot::after,
+  &-tabs__nav-bar,
+  &-tabs__nav-bar:after,
+  &-swipe__indicators &-swipe__indicator--active{
+    background-color: @theme-color !important;
+  }
+  &-checkbox--checked{
+    background-color: @theme-color !important;
+    border-color: @theme-color !important;
+    border-radius: 3px;
+    /*width: 18px !important;*/
+    /*height: 18px !important;*/
+  }
+  /*NavBar 主题色相关*/
+  &-nav-bar__text,
+  &-nav-bar .van-icon{
+    color: @color-666 !important;
+  }
+  &-nav-bar__text:active,
+  &-nav-bar__text:focus{
+    background-color: transparent !important;
+    color: @color-666 !important;
+  }
+}
+
+.van-tabs__line {
+  background: @theme-color!important;
+  height: 1px!important;
+}
+
+.index-bg-gray{
+  background-color: #eee;
+}
+.text-gray{
+  color: rgba(0,0,0,.54);
+}
+.theme-color{
+  color: @theme-color;
+}
+.theme-bg{
+  background-color: @theme-color;
+}
+img{
+  max-width: 100%;
+}
+

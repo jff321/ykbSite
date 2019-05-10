@@ -1,0 +1,398 @@
+<template>
+  <div class="home">
+    <div class="caption">
+      <div class="logout-box" @click="logout">
+        退出登录
+      </div>
+      <div class="today-people">
+        <p class="label-tip">今日访客</p>
+        <h1>{{peopleList.total_count || 0}}</h1>
+      </div>
+      <div class="people-stats">
+        <van-row>
+          <van-col :span="6"><div class="list-top">流动客户</div><div class="list-bottom">{{peopleList.new_count?peopleList.new_count:0}}</div></van-col>
+          <van-col :span="6"><div class="list-top">暂留客户</div><div class="list-bottom">{{peopleList.tmp_count?peopleList.tmp_count:0}}</div></van-col>
+          <van-col :span="6"><div class="list-top">常驻客户</div><div class="list-bottom">{{peopleList.back_count?peopleList.back_count:0}}</div></van-col>
+          <van-col :span="6"><div class="list-top">近一小时新增</div><div class="list-bottom">{{peopleList.onehour_count?peopleList.onehour_count:0}}</div></van-col>
+        </van-row>
+      </div>
+    </div>
+    
+    <div class="splitor"></div>
+
+    <div class="account-stats">
+      <router-link :to="{name: 'moneydetail'}">
+      <van-row style="border-bottom: 1px solid #eee;">
+        <van-col span="12" style="padding-bottom: 10px; color: #666; font-size: 16px;">
+          账户总览
+        </van-col>
+        <van-col span="12" style="text-align: right;">
+          <span style="padding-top: 2px;font-size: 14px;color: #999">明细</span>
+          <van-icon name="arrow"  style="font-size:11px;vertical-align:-3px;margin-left: 5px;color: #999;"/>
+        </van-col>
+      </van-row>
+      </router-link>
+      <van-row class="costs">
+        <van-col span="8" class="cost-box">
+          <span class="help-text">余额</span>
+          <p class="money"><span class="unit">¥</span> {{MoneyList.total}}</p>
+        </van-col>
+        <van-col span="8" class="cost-box">
+          <span class="help-text">红包</span>
+          <p class="money"><span class="unit">¥</span> {{MoneyList.freeze_total}}</p>
+        </van-col>
+        <van-col span="8" class="cost-box">
+          <span class="help-text">今日花费</span>
+          <p class="money"><span class="unit">¥</span> {{MoneyList.today_cost}}</p>
+        </van-col>
+        <van-col span="8" class="cost-box">
+          <span class="help-text">电话花费</span>
+          <p class="money"><span class="unit">¥</span> {{MoneyList.phone_cost}}</p>
+        </van-col>
+        <van-col span="8" class="cost-box">
+          <span class="help-text">短信花费</span>
+          <p class="money"><span class="unit">¥</span> {{MoneyList.sms_cost}}</p>
+        </van-col>
+        <van-col span="8" class="cost-box">
+          <span class="help-text">闪信花费</span>
+          <p class="money"><span class="unit">¥</span> {{MoneyList.flicker}}</p>
+        </van-col>
+      </van-row>
+    </div>
+
+    <div class="splitor"></div>
+
+    <van-row class="home-list">
+      <!--<router-link :to="{name:'peoplelist'}">-->
+      <van-col span="8" style="text-align: center">
+        <div class="home-list-img" style="color: #6069D2" @click="href('customer')"><icon name="phone"  scale="2.2"></icon></div>
+        <div class="home-list-des">拨号</div>
+      </van-col>
+      <!--</router-link>-->
+      <!--<router-link :to="{name:'peoplelist'}">-->
+      <van-col span="8" style="text-align: center">
+        <!--<div class="home-list-img" style="color: #DFB577;"><img src="./imgs/flash-on.png" alt="" style="width: 40px;"></div>-->
+        <div class="home-list-img" style="color: #2FD474" @click="href('flashletter', {id: 1})"><icon name="bolt" scale="2.2"></icon></div>
+        <div class="home-list-des">闪信</div>
+      </van-col>
+      <!--</router-link>-->
+        <!--<router-link :to="{name:'peoplelist'}">-->
+      <van-col span="8" style="text-align: center">
+        <div class="home-list-img"  @click="href('flashletter', {id: 2})"><icon name="envelope"  scale="2.2"></icon></div>
+        <div class="home-list-des">短信</div>
+      </van-col>
+    </van-row>
+  </div>
+</template>
+<script>
+  import { Row, Col, Icon, Button, Popup, Actionsheet, DatetimePicker, Toast, Dialog } from 'vant';
+  export default {
+    name: 'index',
+    components: {
+      [Row.name]: Row,
+      [Col.name]: Col,
+      [Icon.name]: Icon,
+      [Button.name]: Button,
+      [Popup.name]: Popup,
+      [Actionsheet.name]: Actionsheet,
+      [DatetimePicker.name]: DatetimePicker,
+      [Toast.name]: Toast,
+      [Dialog.name]: Dialog
+    },
+    data() {
+      return {
+        today: '',
+        show: false,
+        peopleList: [],
+        MoneyList: [],
+        bindSelect: '',
+        binding: [],
+        beginshowdatelist: false,
+        endshowdatelist: false,
+        beginDateTime: '',
+        endDateTime: '',
+        begincurrentDate: new Date(),
+        endcurrentDate: new Date()
+      };
+    },
+    mounted() {
+      this.bindSelect = 'all';
+      this.today = '今日';
+      this.getTodayDate();
+      this.getProbelist();
+      this.getMoneyList();
+      this.getBindList();
+    },
+    methods: {
+      getTotal() {},
+      getBindList() {
+        this.$get('probe/binding', '', (res) => {
+          if (res.data.status === 1) {
+            console.info('总数据', res.data.data);
+            this.binding = res.data.data;
+            // this.bindSelect = res.data.data[0].id;
+          } else {
+            console.info('数据获取失败');
+          }
+        });
+      },
+      Cancel() {
+        this.show = false;
+        this.beginDateTime = '';
+        this.endDateTime = '';
+        this.bindSelect = 'all';
+      }, //  取消搜索
+      submitSearch() {
+        this.getProbelist();
+      },
+      getTodayDate() {
+        const end = new Date();
+        const start = new Date();
+        start.setTime(start.getTime() - 3600 * 1000 * 24 * 0);
+        this.transferDate([start, end]);
+      },
+      transferDate(value) {
+        this.beginDateTime = value[0].getFullYear() + '-' + (value[0].getMonth() + 1) + '-' + value[0].getDate() + ' 00:00:00';
+        this.endDateTime = value[1].getFullYear() + '-' + (value[1].getMonth() + 1) + '-' + (value[1].getDate() + 1) + ' 00:00:00';
+        this.beginTime = this.beginDateTime;
+        this.endTime = this.endDateTime;
+        // console.info(this.beginTime, this.endTime);
+      },
+      getProbelist() { // 获取搜索列表
+        let mid;
+        let updated;
+        if (this.bindSelect === 'all') {
+          mid = '';
+        } else {
+          mid = '&mid=' + this.bindSelect;
+        }
+        if (!this.beginDateTime && !this.endDateTime) {
+          updated = '';
+        } else {
+          updated = '&start_time=' + this.beginDateTime + '&end_time=' + this.endDateTime;
+        }
+        console.info('mac/count/?' + mid + updated);
+        this.$get('mac/count/?' + mid + updated, '', (res) => {
+          if (res.data.status === 1) {
+            console.info('获取到的数据', res.data.data);
+            this.peopleList = res.data.data;
+            if (this.beginDateTime !== this.beginTime || this.endDateTime !== this.endTime) {
+              this.today = '';
+            }
+            // this.today = '';
+            this.show = false;
+          } else {
+            Dialog.alert(
+              {
+                title: '提示',
+                message: res.data.msg
+              });
+          }
+        });
+      },
+      getMoneyList() {
+        this.$get('media/money?count=1', '', (res) => {
+          if (res.data.status === 1) {
+            console.info('获取到的金钱', res.data);
+            this.MoneyList = res.data.data;
+          } else {
+            Dialog.alert(
+              {
+                title: '提示',
+                message: res.data.msg
+              });
+          }
+        });
+      },
+      logout() {
+        localStorage.removeItem('token');
+        this.$router.push('/login/index');
+      },
+      beginselectDate() {
+        this.beginshowdatelist = true;
+      },
+      begincancelDate() {
+        this.beginshowdatelist = false;
+      },
+      beginconfirmDate() {
+        this.beginDateTime = this.stampToDate(this.begincurrentDate / 1000);
+        this.beginshowdatelist = false;
+      },
+      endselectDate() {
+        this.endshowdatelist = true;
+      },
+      endcancelDate() {
+        this.endshowdatelist = false;
+      },
+      endconfirmDate() {
+        this.endDateTime = this.stampToDate(this.endcurrentDate / 1000);
+        this.endshowdatelist = false;
+      }
+    }
+  };
+</script>
+<style>
+  .home .van-popup{
+    width: 90%;
+    border-radius: 3px;
+    padding: 10px 0 0px 0;
+  }
+
+  .caption {
+    background: #44adeb;
+    width: 100%;
+    padding: 20px;
+    color: white;
+    font-family: 'Arial, Helvetica, sans-serif';
+    position: relative;
+  }
+
+  .logout-box {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    font-size: 14px;
+  }
+
+  .today-people {
+    text-align: center;
+  }
+
+  .today-people .label-tip {
+    font-size: 14px;
+    color: white;
+    margin: 0;
+    padding: 0;
+    margin-top: 30px;
+  }
+  .today-people h1 {
+    /* margin-top: 10px; */
+    padding: 0;
+    font-size: 28px;
+    font-weight: normal;
+    font-family: 'PingFang SC';
+
+  }
+
+  .people-stats {
+    margin-top: 20px;
+  }
+
+  .splitor {
+    height: 5px;
+    background: rgb(241,241,241);
+  }
+
+  .account-stats {
+    padding: 10px 15px;
+    padding-bottom: 5px;
+  }
+
+  .costs {
+    margin-top: 10px;
+  }
+
+  .cost-box {
+    margin-bottom: 15px;
+    text-align: center;
+  }
+
+  .cost-box .help-text {
+    font-size: 12px;
+    color: #999;
+  }
+
+  .cost-box .money {
+    font-size: 18px;
+    color: #666;
+    font-family: 'PingFang SC';
+  }
+
+  .cost-box .money .unit {
+    font-size: 12px;
+    
+  }
+</style>
+<style scoped>
+  .pt5{
+    padding-top: 10px;
+  }
+  select{
+    width: 100%;
+    height: 30px;
+    border: 1px solid #eee;
+    border-radius: 5px;
+    outline: none;
+  }
+  .bagDiv{
+    border: 1px solid #eee;
+    width: 90%;
+    height: 30px;
+    font-size:12px;
+    padding-left: 10px;
+    border-radius: 3px;
+    line-height: 30px;
+  }
+  .labelTitle{
+    font-size: 13px;
+    text-align: center;
+    color: rgba(0,0,0,0.8);
+  }
+  .home{
+    background-color: #fff;
+    padding-bottom: 50px;
+  }
+ .home-money, .home-people{
+   padding: 0 0 35px 0;
+   /*border-radius: 0px 0px 200px 200px/ 0px 0px 50px 50px;*/
+   /*border-radius: 0px 0px 50% 50%;*/
+   background-image: -webkit-linear-gradient(#5394D4, #92C5E7);
+   /*background-image: -moz-linear-gradient(#5394D4, #92C5E7);*/
+   /*background-image: -ms-linear-gradient(#5394D4, #92C5E7);*/
+   /*background-image: -o-linear-gradient(#5394D4, #92C5E7);*/
+ }
+ .home-people-one{
+   padding: 10px 0 0 0;
+ }
+  .home-icon{
+    width: 30px;
+    height: 30px;
+    /*padding: 6px;*/
+    border-radius: 50%;
+    color: #6C9ABF;
+    line-height: 36px;
+    margin: 0 auto;
+    text-align: center;
+    background-color: rgba(255,255,255,0.9);
+  }
+  .home-title{
+    line-height: 30px;
+    color: rgba(255,255,255,0.6);
+    font-size: 12px;
+  }
+  .num{
+    font-size: 38px;
+    color:rgba(255,255,255,0.8);
+  }
+  .list{
+
+  }
+ .list-top{
+   font-size: 12px;
+   /* color: rgba(255,255,255,0.6); */
+ }
+  .list-bottom{
+    font-size: 16px;
+    padding-top: 3px;
+    /* color: rgba(255,255,255,0.8); */
+  }
+  .home-list-img{
+    color: #57B9EB;
+    font-size: 30px;
+    margin-top: 30px;
+  }
+  .home-list-des{
+    color: rgba(0,0,0,0.5);
+    font-size: 12px;
+  }
+</style>

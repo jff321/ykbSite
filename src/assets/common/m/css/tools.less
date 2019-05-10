@@ -1,0 +1,303 @@
+/***config***/
+@num: 30; // margin padding 区间
+@fontSize: 30; // 字体区间
+@untis: 0px; // 单位 0为了加减
+@fontuntis: 0px; // 字体单位单位 0为了加减
+.padded-all-loop(@num);
+.padded-loop(top,t,@num);
+.padded-loop(right,r,@num);
+.padded-loop(bottom,b,@num);
+.padded-loop(left,l,@num);
+.margin-all-loop(@num);
+.margin-loop(top,t,@num);
+.margin-loop(right,r,@num);
+.margin-loop(bottom,b,@num);
+.margin-loop(left,l,@num);
+.font-size-loop(@fontSize);
+// 其他工具类
+.t{
+  &-clearfix {
+    clear: both;
+    &:before {
+      display: table;
+      content: " "
+    }
+    &:after {
+      clear: both
+    }
+  }
+  // 字体对齐
+  &-text{
+    &-left{
+      .algin(left);
+    }
+    &-right{
+      .algin(right);
+    }
+    &-center{
+      .algin(center);
+    }
+    &-justify {
+      text-align: justify !important;
+      text-align-all: justify !important;
+      text-align-last:justify !important;
+    }
+    &-default {
+      color: #212121 !important
+    }
+    &-white {
+      color: #ffffff !important
+    }
+    &-primary {
+      color: #00bcd4 !important
+    }
+    &-success {
+      color: #009688 !important
+    }
+    &-info {
+      color: #03a9f4 !important
+    }
+    &-warning {
+      color: #ffc107 !important
+    }
+    &-danger {
+      color: #e51c23 !important
+    }
+    &-pink {
+      color: #e91e63 !important
+    }
+    &-purple {
+      color: #673ab7 !important
+    }
+    &-indigo {
+      color: #3f51b5 !important
+    }
+  }
+  // 背景
+  &-bg{
+    &-default {
+      background-color: #f5f5f5 !important
+    }
+    &-primary {
+      background-color: #00bcd4 !important
+    }
+    &-success {
+      background-color: #009688 !important
+    }
+    &-info {
+      background-color: #03a9f4 !important
+    }
+    &-warning {
+      background-color: #f1c40f !important
+    }
+    &-danger {
+      background-color: #e51c23 !important
+    }
+    &-pink {
+      background-color: #e91e63 !important
+    }
+    &-purple {
+      background-color: #673ab7 !important
+    }
+    &-indigo {
+      background-color: #3f51b5 !important
+    }
+  }
+  &-pull{
+    &-right{
+      .float(left);
+    }
+    &-right{
+      .float(right);
+    }
+  }
+  &-hide {
+    display: none !important
+  }
+  &-show {
+    display: block !important
+  }
+  &-invisible {
+    visibility: hidden
+  }
+  &-inline {
+    display: inline-block;
+    vertical-align: top
+  }
+  &-img-round {
+    border-radius: 50%
+  }
+  /*border 一像素 带圆角的 */
+  &-border-1px{
+    box-shadow:0 0 .5px 0 rgba(0, 0, 0, 0.1);
+  }
+  &-border-b-1px{
+    box-shadow:0 .5px .5px 0 rgba(0, 0, 0, 0.1);
+  }
+  &-border-t,
+  &-border-b,
+  &-border-l,
+  &-border-r,
+  &-border-tb,
+  &-border {
+    position: relative;
+  }
+  &-border-l:before,
+  &-border-r:after {
+    width: 1px;
+    height: 100%;
+    background-color: #dddddd;
+    display: block;
+    content: '';
+    position: absolute;
+    z-index: 0;
+    top: 0;
+    bottom: 0;
+    -webkit-transform-origin: 50% 100%;
+    transform-origin: 50% 100%;
+    pointer-events: none;
+  }
+  &-border-t:before,
+  &-border-b:after {
+    width: 100%;
+    height: 1px;
+    background-color: #dddddd;
+    display: block;
+    content: '';
+    position: absolute;
+    z-index: 0;
+    left: 0;
+    right: auto;
+    -webkit-transform-origin: 100% 50%;
+    transform-origin: 100% 50%;
+    pointer-events: none;
+  }
+  &-border-l:before {
+    right: auto;
+    left: 0;
+  }
+  &-border-r:after {
+    right: 0;
+    left: auto;
+  }
+  &-border-t:before {
+    bottom: auto;
+    top: 0;
+  }
+  &-border-b:after {
+    bottom: 0;
+    top: auto;
+  }
+  &-border:after {
+    display: block;
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: auto;
+    left: 0;
+    right: auto;
+    -webkit-transform-origin: 0 0;
+    -webkit-transform: scale(1);
+    pointer-events: none;
+    border: 1px solid red;
+  }
+  &-ellipsis-1 { // 省略
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  &-ellipsis-2 { // 2行省略
+    display: -webkit-box;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-wrap: break-word;
+    white-space: normal !important;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+  @media screen and (-webkit-min-device-pixel-ratio:1.5) {
+    &-border:after {
+      right: -100%;
+      bottom: -100%;
+      -webkit-transform: scale(0.5);
+    }
+  }
+  @media only screen and (-webkit-min-device-pixel-ratio: 1.5) {
+    &-border-r:after,
+    &-border-l:before  {
+      -webkit-transform: scaleX(1);
+      transform: scaleX(1);
+    }
+    &-border-t:before,
+    &-border-b:after  {
+      -webkit-transform: scaleY(1);
+      transform: scaleY(1);
+    }
+  }
+  @media only screen and (-webkit-min-device-pixel-ratio: 2) {
+    &-border-r:after,
+    &-border-l:before {
+      -webkit-transform: scaleX(0.5);
+      transform: scaleX(0.5);
+    }
+    &-border-t:before,
+    &-border-b:after  {
+      -webkit-transform: scaleY(0.5);
+      transform: scaleY(0.5);
+    }
+  }
+  @media only screen and (-webkit-min-device-pixel-ratio: 3) {
+    &-border-r:after,
+    &-border-l:before {
+      -webkit-transform: scaleX(0.333);
+      transform: scaleX(0.333);
+    }
+    &-border-t:before,
+    &-border-b:after  {
+      -webkit-transform: scaleY(0.333);
+      transform: scaleY(0.333);
+    }
+  }
+}
+// 函数类
+// padding函数
+.padded-loop(@name,@dre,@n, @i:0) when (@i <= @n) {
+  .t-padded-@{dre}-@{i}{
+    padding-@{name}:@i+@untis !important;
+  }
+  .padded-loop(@name,@dre, @n, (@i + 1));
+}
+.padded-all-loop(@n, @i:0) when (@i <= @n) {
+  .t-padded-@{i}{
+    padding:@i+@untis !important;
+  }
+  .padded-all-loop(@n, (@i + 1));
+}
+// margin函数
+.margin-loop(@name,@dre,@n, @i:0) when (@i <= @n) {
+  .t-margin-@{dre}-@{i}{
+    margin-@{name}:@i+@untis !important;
+  }
+  .margin-loop(@name,@dre, @n, (@i + 1));
+}
+.margin-all-loop(@n, @i:0) when (@i <= @n) {
+  .t-margin-@{i}{
+    margin:@i+@untis !important;;
+  }
+  .margin-all-loop(@n, (@i + 1));
+}
+// fontSize函数
+.font-size-loop(@n, @i:5) when (@i <= @n) {
+  .t-font-size-@{i}{
+    font-size:@i+@fontuntis !important;
+  }
+  .font-size-loop(@n, (@i + 1));
+}
+// 对齐函数
+.algin(@direct){
+  text-align: @direct;
+}
+// 浮动函数
+.float(@direct:left){
+  float: @direct;
+}

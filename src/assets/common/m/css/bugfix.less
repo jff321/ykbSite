@@ -1,0 +1,27 @@
+/*vant css bug 修复*/
+.van{
+  &-icon__info{
+    line-height: 12px;
+    padding: 2px 4.5px 0 !important;
+    border-radius: 100rem !important;
+  }
+  &-tabbar{
+    box-shadow: 0 0 22px #e4e4e4dd;
+  }
+  /*修复tag 的层级关系*/
+  &-icon__info,
+  &-tabbar-item__icon-dot::after{
+    z-index: 1;
+  }
+  &-search__input-wrap{
+    border: 0 !important;
+    box-shadow:0 0 .5px 0 rgba(0, 0, 0, 0.1);
+  }
+  &-cell__value--link{ // 修复 cell单元格的value 颜色及位置
+    padding-top: 2px;
+    color: #999999;
+  }
+  &-tab:active{
+    background-color: transparent !important;
+  }
+}

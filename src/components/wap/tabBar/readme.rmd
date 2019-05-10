@@ -1,0 +1,65 @@
+# 使用说明
+<Mfooter :params="footerjson"></Mfooter>
+<script type="text/ecmascript-6">
+//  import imgsrc from '@assets/wap/images/';
+  export default {
+    name: 'Home',
+    data() {
+      return {
+        footerjson: [
+          {
+            name: '党员教育',
+            src: require('./assets/wap/images/dang.png'),
+            activesrc: require('./assets/wap/images/dangactive.png'),
+            router: {
+              name: 'edu',
+              params: {id: 1}
+            }
+          },
+          {
+            name: '党务管理',
+            src: require('./assets/wap/images/team.png'),
+            activesrc: require('./assets/wap/images/teamactive.png'),
+            router: {
+              name: 'manage',
+              params: {id: 1}
+            }
+          },
+          {
+            name: '首页',
+            src: require('./assets/wap/images/home.png'),
+            class: 'shome',
+            router: {
+              name: 'home',
+              params: {id: 1}
+            }
+          },
+          {
+            name: '党员服务',
+            src: require('./assets/wap/images/service.png'),
+            activesrc: require('./assets/wap/images/serviceactive.png'),
+            router: {
+              name: 'service',
+              params: {id: 1}
+            }
+          },
+          {
+            name: '个人中心',
+            src: require('./assets/wap/images/my.png'),
+            activesrc: require('./assets/wap/images/myactive.png'),
+            router: {
+              name: 'my',
+              params: {id: 1}
+            }
+          }
+        ]
+      };
+    },
+    components: {
+      Mfooter: function (resolve) {
+        // 异步组件写法
+        require(['@/components/wap/tabBar/footerimg.vue'], resolve);
+      }
+    }
+  };
+</script>

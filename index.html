@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no,email=no,adress=no"/>
+    <meta name="renderer" content="webkit">
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <title></title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <!-- built files will be auto injected -->
+    <script>
+      (function() {
+        var link = document.querySelector("link[rel*='icon']") || document.createElement('link');
+        link.type = 'image/x-icon';
+        link.rel = 'shortcut icon';
+        this.axios.get('http://api.51miaozhuan.com/client/logo?domain='+ document.domain + '&type=1')
+          .then((response) => {
+            if(response.data.code === 200){
+              link.href = response.data.data.logo.logo_url;
+              localStorage.setItem("avatorUrl", response.data.data.logo.logo_url);
+            } else {
+              this.$status(response.data.msg)
+            }
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+        document.getElementsByTagName('head')[0].appendChild(link);
+      })();
+    </script>
+  </body>
+</html>

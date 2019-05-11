@@ -22,7 +22,7 @@
           </template>
           <van-radio name="1" />
         </van-cell>
-        <van-cell title="支付宝支付" clickable @click="radio = '2'">
+        <van-cell clickable @click="radio = '2'">
           <template slot="title">
             <div style="display: inline-block;">
               <img src="./imgs/payment1.png" alt="" style="width: 20px;height: 20px;vertical-align:middle;">

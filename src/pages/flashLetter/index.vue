@@ -430,6 +430,7 @@
                     }
                   }
                 }
+                // this.hasData = 1;
               }
               if (this.list.length === 0) {
                 // console.log('if (this.list.length === 0的情况下出现');
@@ -467,7 +468,7 @@
       },
       infinite(done) {
         // 加载更多插件
-        // console.info(this.hasData, this.page);
+        console.info('加载！！');
         if (this.hasData) {
           // 代表没有 更多数据了
           done(true);

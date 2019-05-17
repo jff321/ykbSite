@@ -308,10 +308,8 @@ export default {
             }
           } else {
             if (this.page === 1) {
-              // console.log('page等于1的时候发生page等于1的时候发生');
               this.list = result.data.data.list;
             } else {
-              // console.log('page大于1的时候发生');
               if (this.list[0] && this.list[0].id === result.data.data.list[0].id) {
                 this.list = result.data.data.list;
               } else {
